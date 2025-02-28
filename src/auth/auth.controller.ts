@@ -95,6 +95,7 @@ export class AuthController {
     type: SignInResponse,
   })
   refreshToken(@Request() req: any) {
+    console.log('refreshToken');
     return this.authService.refreshToken(req.user.id, req.user.name);
   }
 
