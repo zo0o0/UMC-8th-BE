@@ -1,4 +1,11 @@
-import { Controller, Get, Param, ParseIntPipe, Request } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Request,
+} from '@nestjs/common';
 import { UserService } from './users.service';
 import { ResponseMessage } from '../common/decorators/response-message-decorator';
 import {
@@ -45,5 +52,22 @@ export class UserController {
   })
   async getUserInfo(@Param('userId', ParseIntPipe) userId: number) {
     return await this.usersService.getMyInfo(userId);
+  }
+
+  @ResponseMessage('회원 탈퇴')
+  @Delete()
+  @ApiOperation({
+    summary: '회원 탈퇴',
+    description:
+      '회원 탈퇴를 진행합니다. 회원 탈퇴 시, 모든 게시글, 댓글, 좋아요, 사용자의 정보가 삭제됩니다.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '회원 탈퇴 성공',
+  })
+  async deleteUser(@Request() req: any) {
+    const userId = req.user.id;
+
+    return await this.usersService.deleteUser(userId);
   }
 }
