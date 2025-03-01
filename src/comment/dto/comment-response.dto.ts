@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { CommonResponse } from '../../common/dto/common-response.dto';
+import { IsIn, IsOptional, IsString } from 'class-validator';
 
 /**
  * 작성자 정보 DTO
@@ -142,4 +143,16 @@ export class GetCommentsQueryDto {
     description: '한 페이지에 보여줄 댓글 수 (리밋)',
   })
   limit?: number;
+
+  @ApiPropertyOptional({
+    enum: ['asc', 'desc'],
+    example: 'asc',
+    description: '정렬 순서: "asc"는 오래된 순, "desc"는 최신순',
+  })
+  @IsOptional()
+  @IsString()
+  @IsIn(['asc', 'desc'], {
+    message: 'order 값은 "asc" 또는 "desc"만 허용됩니다.',
+  })
+  order?: 'asc' | 'desc';
 }
