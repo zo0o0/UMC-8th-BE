@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ResponseInterceptor } from 'src/common/interceptors/response.interceptor';
 import { LpModule } from 'src/lps/lps.module';
 import { CommentModule } from './comment/comment.module';
+import { LikesModule } from './likes/likes.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { CommentModule } from './comment/comment.module';
     }),
     LpModule,
     CommentModule,
+    LikesModule,
   ],
   controllers: [AppController],
   providers: [AppService, ResponseInterceptor],
