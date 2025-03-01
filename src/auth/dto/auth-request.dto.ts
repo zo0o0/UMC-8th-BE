@@ -19,5 +19,5 @@ export class RefreshTokenRequestDto {
   })
   @IsNotEmpty()
   @IsString()
-  refreshToken: string;
+  refresh: string;
 }
