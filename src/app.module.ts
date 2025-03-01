@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { ResponseInterceptor } from 'src/common/interceptors/response.interceptor';
 import { LpModule } from 'src/lps/lps.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { LpModule } from 'src/lps/lps.module';
       isGlobal: true,
     }),
     LpModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService, ResponseInterceptor],
