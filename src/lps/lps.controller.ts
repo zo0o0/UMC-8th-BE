@@ -72,6 +72,7 @@ export class LpsController {
     return await this.lpsService.findByUser({ cursorPaginationDto, userId });
   }
 
+  @ApiBearerAuth()
   @ResponseMessage('Lp 상세 조회에 성공했습니다.')
   @Get(':lpsId')
   @ApiOperation({
@@ -84,7 +85,10 @@ export class LpsController {
     type: LpDetailResponseWrapperDto,
   })
   @Public()
-  async getLp(@Param('lpsId', ParseIntPipe) lpsId: number) {
+  async getLp(
+    @Param('lpsId', ParseIntPipe) lpsId: number,
+    @Request() req: any,
+  ) {
     return await this.lpsService.findOne(lpsId);
   }
 

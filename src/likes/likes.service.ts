@@ -69,6 +69,10 @@ export class LikesService {
 
     return await this.pagination.paginate('lp', 'id', {
       ...cursorPaginationDto,
+      include: {
+        tags: true,
+        likes: true,
+      },
       extraWhere: {
         likes: {
           some: { userId },

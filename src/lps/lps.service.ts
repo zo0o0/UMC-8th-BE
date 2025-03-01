@@ -13,7 +13,13 @@ export class LpsService {
   ) {}
 
   async findAll(cursorPaginationDto: CursorPaginationDto) {
-    return await this.pagination.paginate('lp', 'id', cursorPaginationDto);
+    return await this.pagination.paginate('lp', 'id', {
+      ...cursorPaginationDto,
+      include: {
+        tags: true,
+        likes: true,
+      },
+    });
   }
 
   async findByUser({
@@ -25,6 +31,10 @@ export class LpsService {
   }) {
     return await this.pagination.paginate('lp', 'id', {
       ...cursorPaginationDto,
+      include: {
+        tags: true,
+        likes: true,
+      },
       extraWhere: {
         authorId: userId,
       },
@@ -49,6 +59,7 @@ export class LpsService {
           },
         },
         tags: true,
+        likes: true,
       },
     });
   }
@@ -163,6 +174,10 @@ export class LpsService {
   }) {
     return await this.pagination.paginate('lp', 'id', {
       ...cursorPaginationDto,
+      include: {
+        tags: true,
+        likes: true,
+      },
       extraWhere: {
         tags: {
           some: { name: tagName },

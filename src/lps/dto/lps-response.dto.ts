@@ -1,7 +1,29 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { CommonResponse } from '../../common/dto/common-response.dto';
 
+// 태그 정보 DTO
+export class TagResponseDto {
+  @ApiProperty({ example: 4, description: '태그 고유 식별자' })
+  id: number;
+
+  @ApiProperty({ example: '매튜', description: '태그 이름' })
+  name: string;
+}
+
+// 좋아요 정보 DTO
+export class LikeResponseDto {
+  @ApiProperty({ example: 5, description: '좋아요 고유 식별자' })
+  id: number;
+
+  @ApiProperty({ example: 3, description: '좋아요를 누른 사용자 ID' })
+  userId: number;
+
+  @ApiProperty({ example: 13, description: '좋아요가 연결된 LP ID' })
+  lpId: number;
+}
+
 // 공통 LP 정보 DTO (리스트와 상세 조회 모두 사용)
+// 기존 필드에 tags와 likes 필드를 추가하였습니다.
 export class LpResponseDto {
   @ApiProperty({ example: 1, description: 'LP의 고유 식별자' })
   id: number;
@@ -41,6 +63,18 @@ export class LpResponseDto {
     description: '수정 일자',
   })
   updatedAt: Date;
+
+  @ApiProperty({
+    type: [TagResponseDto],
+    description: '태그 목록',
+  })
+  tags: TagResponseDto[];
+
+  @ApiProperty({
+    type: [LikeResponseDto],
+    description: '좋아요 정보 목록',
+  })
+  likes: LikeResponseDto[];
 }
 
 // 리스트 응답용 DTO
@@ -100,13 +134,7 @@ export class LpDetailResponseDto extends LpResponseDto {
   @ApiProperty({ type: AuthorResponseDto, description: '작성자 정보' })
   author: AuthorResponseDto;
 
-  @ApiProperty({
-    example: [],
-    description: '태그 목록',
-    isArray: true,
-    type: String,
-  })
-  tags: string[];
+  // 상세 조회 응답에서는 tags와 likes가 LpResponseDto에 이미 포함됩니다.
 }
 
 export class LpDetailResponseWrapperDto extends CommonResponse<LpDetailResponseDto> {
