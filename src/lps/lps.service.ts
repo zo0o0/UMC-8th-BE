@@ -37,7 +37,17 @@ export class LpsService {
         id: lpsId,
       },
       include: {
-        author: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            bio: true,
+            avatar: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
         tags: true,
       },
     });

@@ -9,14 +9,6 @@ import {
 
 export class CreateLpsDto {
   @ApiProperty({
-    description: 'LP의 고유 식별자',
-    example: 'unique-lp-slug',
-  })
-  @IsString()
-  @IsOptional()
-  slug?: string;
-
-  @ApiProperty({
     description: 'LP의 제목',
     example: 'NestJS로 배우는 타입스크립트',
   })

@@ -3,14 +3,6 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-function generateSlug(title: string) {
-  return title
-    .toLowerCase()
-    .trim()
-    .replace(/ /g, '-') // Replace Spaces with Hyphens
-    .replace(/[^\w-]+/g, ''); // Remove all non-word characters
-}
-
 async function main() {
   const users = Array.from({ length: 10 }).map(() => ({
     name: faker.person.fullName(),
@@ -25,7 +17,6 @@ async function main() {
 
   const lps = Array.from({ length: 400 }).map(() => ({
     title: faker.lorem.sentence(),
-    slug: generateSlug(faker.lorem.sentence()),
     content: faker.lorem.paragraphs(3),
     thumbnail: faker.image.urlLoremFlickr(),
     authorId: faker.number.int({ min: 1, max: 10 }),
