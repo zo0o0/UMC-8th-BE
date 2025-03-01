@@ -1,4 +1,15 @@
-import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  ParseIntPipe,
+  Body,
+  Request,
+  Get,
+  Query,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -6,13 +17,17 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { ResponseMessage } from 'src/common/decorators/response-message-decorator';
 import { CommentService } from './comment.service';
-import { ResponseMessage } from '../common/decorators/response-message-decorator';
-import { CursorPaginationDto } from '../common/dto/cursor-pagination.dto';
 import {
   CommentListResponseDto,
+  CommentResponse,
+  CommentResponseDto,
+  DeleteCommentResponse,
   GetCommentsQueryDto,
 } from './dto/comment-response.dto';
+import { CreateCommentDto, UpdateCommentDto } from './dto/create-comment.dto';
+import { CursorPaginationDto } from '../common/dto/cursor-pagination.dto';
 
 @ApiBearerAuth()
 @ApiTags('comments')
@@ -40,5 +55,79 @@ export class CommentController {
       Number(lpsId),
       cursorPaginationDto,
     );
+  }
+
+  @ResponseMessage('댓글 생성에 성공했습니다.')
+  @Post()
+  @ApiOperation({
+    summary: '댓글 생성',
+    description: '해당 LP에 새로운 댓글을 생성합니다.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: '댓글 생성 성공',
+    type: CommentResponseDto,
+  })
+  async createComment(
+    @Param('lpsId', ParseIntPipe) lpsId: number,
+    @Request() req: any,
+    @Body() createCommentDto: CreateCommentDto,
+  ) {
+    const userId = req.user.id;
+    return await this.commentService.create({
+      lpId: lpsId,
+      userId,
+      createCommentDto,
+    });
+  }
+
+  @ResponseMessage('댓글 수정에 성공했습니다.')
+  @Patch(':commentId')
+  @ApiOperation({
+    summary: '댓글 수정',
+    description: '본인이 작성한 댓글만 수정할 수 있습니다.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '댓글 수정 성공',
+    type: CommentResponse,
+  })
+  async updateComment(
+    @Param('lpsId', ParseIntPipe) lpsId: number,
+    @Param('commentId', ParseIntPipe) commentId: number,
+    @Request() req: any,
+    @Body() updateCommentDto: UpdateCommentDto,
+  ) {
+    const userId = req.user.id;
+    return await this.commentService.update({
+      commentId,
+      lpId: lpsId,
+      userId,
+      updateCommentDto,
+    });
+  }
+
+  @ResponseMessage('댓글 삭제에 성공했습니다.')
+  @Delete(':commentId')
+  @ApiOperation({
+    summary: '댓글 삭제',
+    description: '본인이 작성한 댓글만 삭제할 수 있습니다.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '댓글 삭제 성공',
+    type: DeleteCommentResponse,
+  })
+  async deleteComment(
+    @Param('lpsId', ParseIntPipe) lpsId: number,
+    @Param('commentId', ParseIntPipe) commentId: number,
+    @Request() req: any,
+  ) {
+    const userId = req.user.id;
+    return await this.commentService.delete({
+      commentId,
+      lpId: lpsId,
+      userId,
+    });
   }
 }

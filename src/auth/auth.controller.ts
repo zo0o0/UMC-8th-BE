@@ -49,6 +49,9 @@ export class AuthController {
     description: '회원가입 성공',
     type: SignUpResponse,
   })
+  @ApiBody({
+    type: CreateUserDto,
+  })
   registerUser(@Body() createUserDto: CreateUserDto) {
     return this.authService.registerUser(createUserDto);
   }

@@ -74,6 +74,15 @@ export class CommentResponseDto {
   author: AuthorResponseDto;
 }
 
+// 댓글 삭제
+export class DeleteCommentResponseDto {
+  @ApiProperty({
+    example: '댓글이 삭제되었습니다.',
+    description: '삭제 결과 메시지',
+  })
+  message: string;
+}
+
 /**
  * 댓글 목록 데이터 응답 DTO (페이징 포함)
  */
@@ -100,6 +109,23 @@ export class CommentListDataResponseDto {
 export class CommentListResponseDto extends CommonResponse<CommentListDataResponseDto> {
   @ApiProperty({ type: CommentListDataResponseDto, nullable: true })
   data: CommentListDataResponseDto;
+}
+
+/**
+ * 댓글 조회 응답 DTO
+ */
+export class CommentResponse extends CommonResponse<CommentResponseDto> {
+  @ApiProperty({ type: CommentResponseDto, nullable: true })
+  data: CommentResponseDto;
+}
+
+/**
+ * 댓글 삭제 응답 DTO
+ */
+
+export class DeleteCommentResponse extends CommonResponse<DeleteCommentResponseDto> {
+  @ApiProperty({ type: DeleteCommentResponseDto, nullable: true })
+  data: DeleteCommentResponseDto;
 }
 
 /**
