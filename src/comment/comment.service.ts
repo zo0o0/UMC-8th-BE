@@ -90,8 +90,6 @@ export class CommentService {
     userId: number;
     updateCommentDto: UpdateCommentDto;
   }) {
-    console.log(updateCommentDto);
-
     // 댓글 존재 여부 및 LP 소속 확인
     const comment = await this.prisma.comment.findUnique({
       where: { id: commentId },

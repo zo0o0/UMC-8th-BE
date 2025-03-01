@@ -7,12 +7,13 @@ export class PaginationService {
 
   async paginate(
     model: keyof PrismaService, // Prisma 모델을 안전하게 받음
-    cursorField: string, // 커서 필드 (id 등)
+    cursorField: string, // 커서 필드 (예: id)
     paginationDto: {
       cursor?: string | number;
       limit?: string | number;
+      order?: 'asc' | 'desc'; // 정렬 순서 추가
       search?: string; // 검색 기능 추가
-      extraWhere?: Record<string, any>; // 추가 필터 조건 (특정 userId 등)
+      extraWhere?: Record<string, any>; // 추가 필터 조건 (예: 특정 userId 등)
       include?: Record<string, any>; // 관계를 포함할 옵션
     },
   ): Promise<{
@@ -20,7 +21,7 @@ export class PaginationService {
     nextCursor: string | number | null;
     hasNext: boolean;
   }> {
-    // cursor와 limit이 문자열일 경우 숫자로 변환
+    // limit과 cursor를 숫자로 변환
     const limitValue =
       typeof paginationDto.limit === 'string'
         ? parseInt(paginationDto.limit, 10)
@@ -30,9 +31,17 @@ export class PaginationService {
         ? parseInt(paginationDto.cursor, 10)
         : paginationDto.cursor;
 
+    // order 값에 따라 정렬 방향과 커서 비교 연산자 결정
+    const orderDirection = paginationDto.order === 'desc' ? 'desc' : 'asc';
+    const cursorOperator = orderDirection === 'desc' ? 'lt' : 'gt';
+
     // 커서 조건 추가 (cursor가 제공된 경우)
+    // 단, 내림차순(order=desc)이고 cursor가 0인 경우는 조건에서 제외하여 전체 최신 데이터를 조회하도록 함
     const cursorCondition =
-      cursorValue !== undefined ? { [cursorField]: { gt: cursorValue } } : {};
+      cursorValue !== undefined &&
+      !(orderDirection === 'desc' && cursorValue === 0)
+        ? { [cursorField]: { [cursorOperator]: cursorValue } }
+        : {};
 
     // PrismaService에 해당 모델이 존재하는지 확인
     if (!(model in this.prisma)) {
@@ -40,14 +49,14 @@ export class PaginationService {
     }
     const prismaModel = this.prisma[model] as any;
 
-    // 검색 가능한 필드 정의 (모델별로 동적으로 지정)
+    // 모델별 검색 가능한 필드 정의
     const searchableFields: Record<string, string[]> = {
       lp: ['title'],
     };
 
     const searchFields = searchableFields[String(model)] || [];
 
-    // 검색 조건 추가 (해당 모델의 필드에서 검색할 수 있도록)
+    // 검색 조건 추가 (해당 모델의 필드에서 검색)
     const searchCondition =
       searchFields.length && paginationDto.search
         ? {
@@ -68,7 +77,7 @@ export class PaginationService {
       const results = await prismaModel.findMany({
         where: finalWhere, // 동적으로 where 조건 추가
         take: limitValue + 1, // hasNext 확인을 위해 limit+1개 조회
-        orderBy: { [cursorField]: 'asc' },
+        orderBy: { [cursorField]: orderDirection },
         include: paginationDto.include, // 관계 옵션 전달
       });
 
