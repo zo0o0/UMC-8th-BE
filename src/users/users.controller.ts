@@ -1,4 +1,4 @@
-import { Controller, Get, Request } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Request } from '@nestjs/common';
 import { UserService } from './users.service';
 import { ResponseMessage } from '../common/decorators/response-message-decorator';
 import {
@@ -29,6 +29,21 @@ export class UserController {
   async getMyInfo(@Request() req: any) {
     const userId = req.user.id;
 
+    return await this.usersService.getMyInfo(userId);
+  }
+
+  @ResponseMessage('다른 사용자 정보 조회에 성공했습니다.')
+  @Get('/:userId')
+  @ApiOperation({
+    summary: '다른 사용자 정보 조회',
+    description: '다른 사용자의 정보를 조회합니다.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '다른 사용자 정보 조회 성공',
+    type: UserMyInfoResponse,
+  })
+  async getUserInfo(@Param('userId', ParseIntPipe) userId: number) {
     return await this.usersService.getMyInfo(userId);
   }
 }

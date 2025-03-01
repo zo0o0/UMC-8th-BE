@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { hash } from 'argon2';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
@@ -45,6 +45,16 @@ export class UserService {
   }
 
   async getMyInfo(userId: number) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException('해당 사용자를 찾을 수 없습니다.');
+    }
+
     return await this.prisma.user.findUnique({
       where: {
         id: userId,
