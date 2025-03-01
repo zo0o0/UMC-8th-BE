@@ -52,6 +52,7 @@ export class PaginationService {
     // 모델별 검색 가능한 필드 정의
     const searchableFields: Record<string, string[]> = {
       lp: ['title'],
+      tag: ['name'],
     };
 
     const searchFields = searchableFields[String(model)] || [];
