@@ -153,4 +153,21 @@ export class LpsService {
 
     return !!result;
   }
+
+  async findByTag({
+    tagName,
+    cursorPaginationDto,
+  }: {
+    tagName: string;
+    cursorPaginationDto: CursorPaginationDto;
+  }) {
+    return await this.pagination.paginate('lp', 'id', {
+      ...cursorPaginationDto,
+      extraWhere: {
+        tags: {
+          some: { name: tagName },
+        },
+      },
+    });
+  }
 }

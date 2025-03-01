@@ -145,4 +145,25 @@ export class LpsController {
     const userId = req.user.id;
     return await this.lpsService.delete({ userId, lpsId });
   }
+
+  // 특정 태그에 관한 게시글 목록 조회
+  @ResponseMessage('특정 태그 관련 Lp 목록 조회에 성공했습니다.')
+  @Get('tag/:tagName')
+  @ApiOperation({
+    summary: '특정 태그 관련 Lp 목록 조회',
+    description:
+      '특정 태그를 가진 Lp 목록을 조회합니다. 커서 기반 페이지네이션 기능을 제공합니다. 기본값은 10개입니다.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '특정 태그 관련 Lp 목록 조회 성공',
+    type: LpListResponseDto,
+  })
+  @Public()
+  async getLpsByTag(
+    @Param('tagName') tagName: string,
+    @Query() cursorPaginationDto: CursorPaginationDto,
+  ) {
+    return await this.lpsService.findByTag({ tagName, cursorPaginationDto });
+  }
 }
