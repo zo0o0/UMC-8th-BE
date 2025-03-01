@@ -9,6 +9,7 @@ import { ResponseInterceptor } from 'src/common/interceptors/response.intercepto
 import { LpModule } from 'src/lps/lps.module';
 import { CommentModule } from './comment/comment.module';
 import { LikesModule } from './likes/likes.module';
+import { TagsModule } from './tags/tags.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { LikesModule } from './likes/likes.module';
     LpModule,
     CommentModule,
     LikesModule,
+    TagsModule,
   ],
   controllers: [AppController],
   providers: [AppService, ResponseInterceptor],
