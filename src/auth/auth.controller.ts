@@ -102,18 +102,28 @@ export class AuthController {
     return this.authService.refreshToken(req.user.id, req.user.name);
   }
 
+  @ApiOperation({ summary: 'Google 인증 페이지로 이동 (로그인 시작)' })
+  @ApiResponse({
+    status: 302,
+    description: 'Google 로그인 페이지로 리다이렉트',
+  })
   @Public()
   @UseGuards(GoogleAuthGuard)
   // google authenticate page move
   @Get('google/login')
   googleLogin() {}
 
+  @ApiOperation({ summary: 'Google 콜백: 사용자 인증 후 토큰 발급' })
+  @ApiResponse({
+    status: 302,
+    description: '프론트엔드로 토큰을 포함한 URL로 리다이렉트',
+  })
   @Public()
   @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
   async googleCallback(@Request() req: any, @Res() res) {
     const response = await this.authService.login(req.user.id, req.user.name);
-
+    console.log(response);
     res.redirect(
       `http://localhost:5173/v1/auth/google/callback?userId=${response.id}&name=${response.name}&accessToken=${response.accessToken}&refreshToken=${response.refreshToken}`,
     );

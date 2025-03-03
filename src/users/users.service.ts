@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { hash } from 'argon2';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -90,6 +91,15 @@ export class UserService {
       await prisma.lp.deleteMany({ where: { authorId: userId } });
       // 최종적으로 사용자 삭제
       return await prisma.user.delete({ where: { id: userId } });
+    });
+  }
+
+  async updateUser(userId: number, updateUserDto: UpdateUserDto) {
+    return await this.prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: updateUserDto,
     });
   }
 }

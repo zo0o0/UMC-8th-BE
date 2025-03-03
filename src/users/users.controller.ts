@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Request,
 } from '@nestjs/common';
 import { UserService } from './users.service';
@@ -15,6 +16,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserMyInfoResponse } from './dto/user-response.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @ApiBearerAuth()
 @ApiTags('users')
@@ -69,5 +71,17 @@ export class UserController {
     const userId = req.user.id;
 
     return await this.usersService.deleteUser(userId);
+  }
+
+  @ResponseMessage('유저 정보 수정')
+  @Patch()
+  @ApiOperation({
+    summary: '유저 정보 수정',
+    description: '유저 정보를 수정합니다.',
+  })
+  async updateUser(@Request() req: any, updateUserDto: UpdateUserDto) {
+    const userId = req.user.id;
+
+    return await this.usersService.updateUser(userId, updateUserDto);
   }
 }
