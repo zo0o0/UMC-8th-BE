@@ -76,6 +76,10 @@ export class AuthController {
   }
 
   @ApiBearerAuth()
+  @ApiOperation({
+    summary: '토큰 인증 테스트',
+    description: '토큰이 없으면 401 unauthorized 에러를 반환합니다.',
+  })
   @Get('protected')
   getAll(@Request() req: any) {
     return `This is a protected route's content. User ID: ${req.user.id}`;
