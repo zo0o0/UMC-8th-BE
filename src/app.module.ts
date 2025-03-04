@@ -10,6 +10,7 @@ import { LpModule } from 'src/lps/lps.module';
 import { CommentModule } from './comment/comment.module';
 import { LikesModule } from './likes/likes.module';
 import { TagsModule } from './tags/tags.module';
+import { UploadsModule } from './uploads/uploads.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { TagsModule } from './tags/tags.module';
     CommentModule,
     LikesModule,
     TagsModule,
+    UploadsModule,
   ],
   controllers: [AppController],
   providers: [AppService, ResponseInterceptor],

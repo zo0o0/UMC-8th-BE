@@ -4,9 +4,11 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { GlobalExceptionFilter } from 'src/common/filters/http-exception.filter';
 import { ResponseInterceptor } from 'src/common/interceptors/response.interceptor';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableVersioning({
     type: VersioningType.URI,
     defaultVersion: '1',
@@ -15,6 +17,10 @@ async function bootstrap() {
   app.enableCors({
     origin: true,
     credentials: true,
+  });
+
+  app.useStaticAssets(join(process.cwd(), 'uploads', 'images'), {
+    prefix: '/uploads',
   });
 
   const config = new DocumentBuilder()
