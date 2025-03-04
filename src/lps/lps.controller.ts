@@ -85,10 +85,7 @@ export class LpsController {
     type: LpDetailResponseWrapperDto,
   })
   @Public()
-  async getLp(
-    @Param('lpsId', ParseIntPipe) lpsId: number,
-    @Request() req: any,
-  ) {
+  async getLp(@Param('lpsId', ParseIntPipe) lpsId: number) {
     return await this.lpsService.findOne(lpsId);
   }
 

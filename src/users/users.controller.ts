@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -11,6 +12,7 @@ import { UserService } from './users.service';
 import { ResponseMessage } from '../common/decorators/response-message-decorator';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -79,9 +81,16 @@ export class UserController {
     summary: '유저 정보 수정',
     description: '유저 정보를 수정합니다.',
   })
-  async updateUser(@Request() req: any, updateUserDto: UpdateUserDto) {
+  @ApiBody({ type: UpdateUserDto })
+  @ApiResponse({
+    status: 200,
+    description: '유저 정보가 성공적으로 수정되었습니다.',
+    type: UserMyInfoResponse,
+  })
+  @ApiResponse({ status: 400, description: '잘못된 요청입니다.' })
+  @ApiResponse({ status: 401, description: '인증에 실패했습니다.' })
+  async updateUser(@Request() req: any, @Body() updateUserDto: UpdateUserDto) {
     const userId = req.user.id;
-
     return await this.usersService.updateUser(userId, updateUserDto);
   }
 }
