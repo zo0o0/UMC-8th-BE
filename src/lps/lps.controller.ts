@@ -26,7 +26,7 @@ import {
   LpDetailResponseWrapperDto,
   LpListResponseDto,
 } from './dto/lps-response.dto';
-import { CreateLpsResponseDto } from './dto/create-lps-response.dto';
+import {CreateLpsResponseDto, LpCreateResponseDto} from './dto/create-lps-response.dto';
 import { LpUpdateResponseDto } from './dto/update-lps-response.dto';
 import { LpDeleteResponseDto } from './dto/delete-lps-response.dto';
 
@@ -98,7 +98,7 @@ export class LpsController {
   @ApiResponse({
     status: 201,
     description: 'Lp 생성 성공',
-    type: CreateLpsResponseDto,
+    type: LpCreateResponseDto,
   })
   @Post()
   async createLp(@Request() req: any, @Body() createLpsDto: CreateLpsDto) {
