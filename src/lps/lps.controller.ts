@@ -84,7 +84,7 @@ export class LpsController {
     description: '나의 Lp 목록 조회 성공',
     type: LpListResponseDto,
   })
-  @Public()
+  @ApiBearerAuth()
   async getMyLps(
     @Request() req: any,
     @Query() cursorPaginationDto: CursorPaginationDto,
