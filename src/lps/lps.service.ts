@@ -91,16 +91,16 @@ export class LpsService {
 
   async update({
     userId,
-    lpsId,
+                 lpId,
     updateLpsDto,
   }: {
     userId: number;
-    lpsId: number;
+    lpId: number;
     updateLpsDto: UpdateLpsDto;
   }) {
     const findLp = await this.prisma.lp.findUnique({
       where: {
-        id: lpsId,
+        id: lpId,
       },
     });
 
@@ -109,7 +109,7 @@ export class LpsService {
     }
 
     const authorIdMatched = await this.prisma.lp.findUnique({
-      where: { id: lpsId, authorId: userId },
+      where: { id: lpId, authorId: userId },
     });
 
     if (!authorIdMatched) {
@@ -118,7 +118,7 @@ export class LpsService {
 
     return await this.prisma.lp.update({
       where: {
-        id: lpsId,
+        id: lpId,
       },
       data: {
         ...updateLpsDto,
@@ -136,10 +136,10 @@ export class LpsService {
     });
   }
 
-  async delete({ lpsId, userId }: { lpsId: number; userId: number }) {
+  async delete({ lpId, userId }: { lpId: number; userId: number }) {
     const findLp = await this.prisma.lp.findUnique({
       where: {
-        id: lpsId,
+        id: lpId,
       },
     });
 
@@ -148,7 +148,7 @@ export class LpsService {
     }
 
     const authorIdMatched = await this.prisma.lp.findUnique({
-      where: { id: lpsId, authorId: userId },
+      where: { id: lpId, authorId: userId },
     });
 
     if (!authorIdMatched) {
@@ -157,7 +157,7 @@ export class LpsService {
 
     const result = await this.prisma.lp.delete({
       where: {
-        id: lpsId,
+        id: lpId,
         authorId: userId,
       },
     });

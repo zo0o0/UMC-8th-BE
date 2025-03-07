@@ -26,7 +26,7 @@ import {
   LpDetailResponseWrapperDto,
   LpListResponseDto,
 } from './dto/lps-response.dto';
-import {CreateLpsResponseDto, LpCreateResponseDto} from './dto/create-lps-response.dto';
+import { LpCreateResponseDto} from './dto/create-lps-response.dto';
 import { LpUpdateResponseDto } from './dto/update-lps-response.dto';
 import { LpDeleteResponseDto } from './dto/delete-lps-response.dto';
 
@@ -74,7 +74,7 @@ export class LpsController {
 
   @ApiBearerAuth()
   @ResponseMessage('Lp 상세 조회에 성공했습니다.')
-  @Get(':lpsId')
+  @Get(':lpId')
   @ApiOperation({
     summary: 'Lp 상세 조회',
     description: '특정 Lp의 상세 정보를 조회합니다.',
@@ -85,8 +85,8 @@ export class LpsController {
     type: LpDetailResponseWrapperDto,
   })
   @Public()
-  async getLp(@Param('lpsId', ParseIntPipe) lpsId: number) {
-    return await this.lpsService.findOne(lpsId);
+  async getLp(@Param('lpId', ParseIntPipe) lpId: number) {
+    return await this.lpsService.findOne(lpId);
   }
 
   @ApiBearerAuth()
@@ -117,14 +117,14 @@ export class LpsController {
     description: 'Lp 정보 업데이트 성공',
     type: LpUpdateResponseDto,
   })
-  @Patch(':lpsId')
+  @Patch(':lpId')
   async updateLp(
     @Request() req: any,
     @Body() updateLpsDto: UpdateLpsDto,
-    @Param('lpsId', ParseIntPipe) lpsId: number,
+    @Param('lpId', ParseIntPipe) lpId: number,
   ) {
     const userId = req.user.id;
-    return await this.lpsService.update({ userId, lpsId, updateLpsDto });
+    return await this.lpsService.update({ userId, lpId, updateLpsDto });
   }
 
   @ApiBearerAuth()
@@ -138,13 +138,13 @@ export class LpsController {
     description: 'Lp 삭제 성공',
     type: LpDeleteResponseDto,
   })
-  @Delete(':lpsId')
+  @Delete(':lpId')
   async deleteLp(
     @Request() req: any,
-    @Param('lpsId', ParseIntPipe) lpsId: number,
+    @Param('lpId', ParseIntPipe) lpId: number,
   ) {
     const userId = req.user.id;
-    return await this.lpsService.delete({ userId, lpsId });
+    return await this.lpsService.delete({ userId, lpId });
   }
 
   // 특정 태그에 관한 게시글 목록 조회

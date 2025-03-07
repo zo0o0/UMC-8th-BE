@@ -31,7 +31,7 @@ import { CursorPaginationDto } from '../common/dto/cursor-pagination.dto';
 
 @ApiBearerAuth()
 @ApiTags('comments')
-@Controller('lps/:lpsId/comments')
+@Controller('lps/:lpId/comments')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
@@ -48,11 +48,11 @@ export class CommentController {
     type: CommentListResponseDto,
   })
   async getComments(
-    @Param('lpsId', ParseIntPipe) lpsId: number,
+    @Param('lpId', ParseIntPipe) lpId: number,
     @Query() cursorPaginationDto: Omit<CursorPaginationDto, 'search'>,
   ) {
     return await this.commentService.findAll(
-      Number(lpsId),
+      Number(lpId),
       cursorPaginationDto,
     );
   }
@@ -69,13 +69,13 @@ export class CommentController {
     type: CommentResponseDto,
   })
   async createComment(
-    @Param('lpsId', ParseIntPipe) lpsId: number,
+    @Param('lpId', ParseIntPipe) lpId: number,
     @Request() req: any,
     @Body() createCommentDto: CreateCommentDto,
   ) {
     const userId = req.user.id;
     return await this.commentService.create({
-      lpId: lpsId,
+      lpId,
       userId,
       createCommentDto,
     });
@@ -93,7 +93,7 @@ export class CommentController {
     type: CommentResponse,
   })
   async updateComment(
-    @Param('lpsId', ParseIntPipe) lpsId: number,
+    @Param('lpId', ParseIntPipe) lpId: number,
     @Param('commentId', ParseIntPipe) commentId: number,
     @Request() req: any,
     @Body() updateCommentDto: UpdateCommentDto,
@@ -101,7 +101,7 @@ export class CommentController {
     const userId = req.user.id;
     return await this.commentService.update({
       commentId,
-      lpId: lpsId,
+      lpId,
       userId,
       updateCommentDto,
     });
@@ -119,14 +119,14 @@ export class CommentController {
     type: DeleteCommentResponse,
   })
   async deleteComment(
-    @Param('lpsId', ParseIntPipe) lpsId: number,
+    @Param('lpId', ParseIntPipe) lpId: number,
     @Param('commentId', ParseIntPipe) commentId: number,
     @Request() req: any,
   ) {
     const userId = req.user.id;
     return await this.commentService.delete({
       commentId,
-      lpId: lpsId,
+      lpId,
       userId,
     });
   }
