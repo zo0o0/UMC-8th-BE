@@ -26,7 +26,7 @@ import {
   LpDetailResponseWrapperDto,
   LpListResponseDto,
 } from './dto/lps-response.dto';
-import { LpCreateResponseDto} from './dto/create-lps-response.dto';
+import { LpCreateResponseDto } from './dto/create-lps-response.dto';
 import { LpUpdateResponseDto } from './dto/update-lps-response.dto';
 import { LpDeleteResponseDto } from './dto/delete-lps-response.dto';
 
@@ -69,6 +69,27 @@ export class LpsController {
     @Param('userId', ParseIntPipe) userId: number,
     @Query() cursorPaginationDto: CursorPaginationDto,
   ) {
+    return await this.lpsService.findByUser({ cursorPaginationDto, userId });
+  }
+
+  @ResponseMessage('내가 생성한 Lp 목록 조회에 성공했습니다.')
+  @Get('user')
+  @ApiOperation({
+    summary: '내가 생성한 Lp 목록 조회',
+    description:
+      '내가 생성한 Lp 목록을 조회합니다. 커서기반 페이지네이션 기능을 제공합니다. 기본값은 10개입니다.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '나의 Lp 목록 조회 성공',
+    type: LpListResponseDto,
+  })
+  @Public()
+  async getMyLps(
+    @Request() req: any,
+    @Query() cursorPaginationDto: CursorPaginationDto,
+  ) {
+    const userId = req.user.id;
     return await this.lpsService.findByUser({ cursorPaginationDto, userId });
   }
 
