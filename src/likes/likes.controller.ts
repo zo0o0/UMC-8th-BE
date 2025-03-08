@@ -11,6 +11,8 @@ import {
 import { LikesService } from './likes.service';
 import {
   ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -18,6 +20,8 @@ import {
 import { CursorPaginationDto } from '../common/dto/cursor-pagination.dto';
 import { ResponseMessage } from '../common/decorators/response-message-decorator';
 import { LpListResponseDto } from '../lps/dto/lps-response.dto';
+import { LikeResponseWrapperDto } from './dto/like-response.dto';
+import { UnlikeResponseWrapperDto } from './dto/unlikie-response.dto';
 
 @ApiTags('likes')
 @ApiBearerAuth()
@@ -33,6 +37,10 @@ export class LikesController {
     summary: '게시글 좋아요',
     description: '특정 게시글에 좋아요를 추가합니다.',
   })
+  @ApiCreatedResponse({
+    description: '좋아요 추가 성공',
+    type: LikeResponseWrapperDto,
+  })
   async likePost(
     @Param('lpId', ParseIntPipe) lpId: number,
     @Request() req: any,
@@ -45,6 +53,10 @@ export class LikesController {
   // 좋아요 취소 API
   // DELETE /v1/lps/:lpId/likes
   @ResponseMessage('게시글에 좋아요를 취소했습니다.')
+  @ApiOkResponse({
+    description: '좋아요 취소 성공',
+    type: UnlikeResponseWrapperDto,
+  })
   @Delete(':lpId/likes')
   @ApiOperation({
     summary: '게시글 좋아요 취소',
