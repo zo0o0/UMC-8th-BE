@@ -93,7 +93,6 @@ export class LpsController {
     return await this.lpsService.findByUser({ cursorPaginationDto, userId });
   }
 
-  @ApiBearerAuth()
   @ResponseMessage('Lp 상세 조회에 성공했습니다.')
   @Get(':lpId')
   @ApiOperation({
