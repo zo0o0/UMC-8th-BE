@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
@@ -11,6 +11,7 @@ import { CommentModule } from './comment/comment.module';
 import { LikesModule } from './likes/likes.module';
 import { TagsModule } from './tags/tags.module';
 import { UploadsModule } from './uploads/uploads.module';
+import { LoggerMiddleware } from './common/logger';
 
 @Module({
   imports: [
@@ -29,4 +30,8 @@ import { UploadsModule } from './uploads/uploads.module';
   controllers: [AppController],
   providers: [AppService, ResponseInterceptor],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): any {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}
