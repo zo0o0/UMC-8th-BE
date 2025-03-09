@@ -81,7 +81,7 @@ export class LpsController {
   })
   @ApiResponse({
     status: 200,
-    description: '나의 Lp 목록 조회 성공',
+    description: "내가 생성한 Lp 목록 조회에 성공했습니다.'",
     type: LpListResponseDto,
   })
   @ApiBearerAuth()
@@ -101,7 +101,7 @@ export class LpsController {
   })
   @ApiResponse({
     status: 200,
-    description: 'Lp 상세 조회 성공',
+    description: 'Lp 상세 조회에 성공했습니다.',
     type: LpDetailResponseWrapperDto,
   })
   @Public()
